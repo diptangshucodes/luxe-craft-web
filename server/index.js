@@ -30,11 +30,19 @@ const CORS_ORIGINS = (process.env.CORS_ORIGINS || 'http://localhost:8081,http://
 // CORS configuration for multiple origins
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || CORS_ORIGINS.includes(origin.trim())) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    // Allow non-browser requests (curl, server-to-server) where origin is undefined
+    if (!origin) return callback(null, true);
+
+    const o = origin.trim();
+
+    // Allow explicitly configured origins
+    if (CORS_ORIGINS.includes(o)) return callback(null, true);
+
+    // Allow Vercel deployments (project and preview domains)
+    if (o.endsWith('.vercel.app') || o.endsWith('.vercel.co')) return callback(null, true);
+
+    console.warn(`Blocked CORS origin: ${origin}`);
+    callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
 };
