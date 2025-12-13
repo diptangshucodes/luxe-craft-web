@@ -2,6 +2,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "env": {
-    "VITE_API_URL": "@api_url"
+    "VITE_API_URL": "@https://kamala-trader-backend.onrender.com"
   }
 }
