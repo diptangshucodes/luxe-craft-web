@@ -55,7 +55,8 @@ export function AdminProductManagement() {
   const fetchProducts = async () => {
     try {
       setError("");
-      const response = await fetch("http://localhost:3001/api/products");
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const response = await fetch(`${API_URL}/api/products`);
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
@@ -114,8 +115,9 @@ export function AdminProductManagement() {
 
       if (editingId) {
         // Update product
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
         const response = await fetch(
-          `http://localhost:3001/api/admin/products/${editingId}`,
+          `${API_URL}/api/admin/products/${editingId}`,
           {
             method: "PUT",
             headers: {
@@ -152,7 +154,8 @@ export function AdminProductManagement() {
           formDataToSend.append("image", selectedFile);
         }
 
-        const response = await fetch("http://localhost:3001/api/admin/products", {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+        const response = await fetch(`${API_URL}/api/admin/products`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -192,14 +195,16 @@ export function AdminProductManagement() {
     });
     setEditingId(product.id);
     setShowForm(true);
-    setPreview(`http://localhost:3001/uploads/${product.image_filename}`);
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    setPreview(`${API_URL}/uploads/${product.image_filename}`);
   };
 
   const handleDelete = async (id: number) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/api/admin/products/${id}`, {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const response = await fetch(`${API_URL}/api/admin/products/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -407,7 +412,7 @@ export function AdminProductManagement() {
                   <tr key={product.id} className="border-b border-border hover:bg-muted/50 transition-colors">
                     <td className="py-3 px-4">
                       <img
-                        src={`http://localhost:3001/uploads/${product.image_filename}`}
+                        src={`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/uploads/${product.image_filename}`}
                         alt={product.name}
                         className="w-12 h-12 object-cover rounded"
                       />

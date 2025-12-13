@@ -19,7 +19,8 @@ export function CollectionGallerySection() {
 
   const fetchGalleryImages = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/gallery-images");
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const response = await fetch(`${API_URL}/api/gallery-images`);
       const data = await response.json();
       setItems(data || []);
     } catch (error) {

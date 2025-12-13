@@ -43,7 +43,8 @@ export function BulkOrderSection() {
     e.preventDefault();
     
     try {
-      const response = await fetch('http://localhost:3001/api/send-bulk-order', {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const response = await fetch(`${API_URL}/api/send-bulk-order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -55,7 +55,8 @@ export function HeroSection() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/products");
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const response = await fetch(`${API_URL}/api/products`);
       const data = await response.json();
       setProducts(data || []);
     } catch (error) {
@@ -150,7 +151,7 @@ export function HeroSection() {
                   {/* Product Image */}
                   <div className="relative w-full aspect-square bg-muted overflow-hidden">
                     <img
-                      src={`http://localhost:3001/uploads/${product.image_filename}`}
+                      src={`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/uploads/${product.image_filename}`}
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
