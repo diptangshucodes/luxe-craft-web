@@ -71,3 +71,14 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Vercel: set `VITE_API_URL` environment variable
+
+If you're deploying to Vercel, do NOT store `VITE_API_URL` directly in `vercel.json`. Instead, add it in the Vercel Project Settings:
+
+1. Open your project on Vercel.
+2. Go to **Settings → Environment Variables**.
+3. Add a variable named `VITE_API_URL` with value `https://kamala-trader-backend.onrender.com` (or your backend URL).
+4. Choose the Environment(s) (Preview, Production) and click **Save**.
+
+After setting the variable, trigger a redeploy (push a commit or click Deploy). This ensures the frontend can call the backend at runtime.
