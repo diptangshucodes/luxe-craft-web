@@ -25,7 +25,19 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
+const CORS_ORIGINS = (process.env.CORS_ORIGINS || 'http://localhost:8081,http://localhost:5173').split(',');
+
+// CORS configuration for multiple origins
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || CORS_ORIGINS.includes(origin.trim())) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
@@ -43,7 +55,7 @@ const upload = multer({
 });
 
 // Middleware
-app.use(cors({ origin: CORS_ORIGIN }));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
@@ -411,6 +423,6 @@ app.put('/api/admin/contact-details', verifyToken, async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`CORS enabled for: ${CORS_ORIGIN}`);
+  console.log(`Server running on port ${PORT}`);
+  console.log(`CORS enabled for: ${CORS_ORIGINS.join(', ')}`);
 });
