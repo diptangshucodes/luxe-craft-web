@@ -4,4 +4,11 @@
   "env": {
     "VITE_API_URL": "https://kamala-trader-backend.onrender.com"
   }
+  ,
+  "rewrites": [
+    {
+      "source": " /(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
