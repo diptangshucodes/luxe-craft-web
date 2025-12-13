@@ -1,9 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Send } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import heroImage1 from "@/assets/hero-leather-1.jpg";
 import heroImage2 from "@/assets/hero-leather-2.jpg";
 import heroImage3 from "@/assets/hero-leather-3.jpg";
@@ -26,14 +23,18 @@ const slides = [
   },
 ];
 
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+  image_filename: string;
+  description: string;
+}
+
 export function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [products, setProducts] = useState<Product[]>([]);
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -48,13 +49,18 @@ export function HeroSection() {
     return () => clearInterval(timer);
   }, [nextSlide]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: "Message Sent!",
-      description: "We'll get back to you within 24 hours.",
-    });
-    setFormData({ name: "", email: "", message: "" });
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/products");
+      const data = await response.json();
+      setProducts(data || []);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   };
 
   return (
@@ -120,62 +126,57 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div id="contact" className="bg-card rounded-2xl p-8 lg:p-10 shadow-lg card-elegant">
-            <div className="mb-8">
+          {/* Featured Products Grid */}
+          <div className="space-y-6">
+            <div>
               <span className="text-gold font-medium tracking-widest text-sm uppercase">
-                Get in Touch
+                Featured Collection
               </span>
               <h3 className="font-serif text-3xl lg:text-4xl font-bold text-foreground mt-2">
-                Contact Us
+                Premium Leather Goods
               </h3>
               <p className="text-muted-foreground mt-3">
-                Have questions about our leather products? We'd love to hear from you.
+                Discover our handcrafted selection of premium leather products, each piece a masterpiece of quality and elegance.
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <Input
-                  type="text"
-                  placeholder="Your Name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  required
-                  className="h-12 bg-background border-border focus:border-primary"
-                />
-              </div>
-              <div>
-                <Input
-                  type="email"
-                  placeholder="Email Address"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  required
-                  className="h-12 bg-background border-border focus:border-primary"
-                />
-              </div>
-              <div>
-                <Textarea
-                  placeholder="Your Message"
-                  value={formData.message}
-                  onChange={(e) =>
-                    setFormData({ ...formData, message: e.target.value })
-                  }
-                  required
-                  rows={4}
-                  className="bg-background border-border focus:border-primary resize-none"
-                />
-              </div>
-              <Button type="submit" variant="hero" size="lg" className="w-full">
-                <Send size={18} />
-                Send Message
-              </Button>
-            </form>
+            {/* Product Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {products.slice(0, 2).map((product) => (
+                <div
+                  key={product.id}
+                  className="bg-card rounded-xl overflow-hidden border border-border hover:border-primary hover:shadow-lg transition-all duration-300 group"
+                >
+                  {/* Product Image */}
+                  <div className="relative w-full aspect-square bg-muted overflow-hidden">
+                    <img
+                      src={`http://localhost:3001/uploads/${product.image_filename}`}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23f5f5f5' width='100' height='100'/%3E%3C/svg%3E";
+                      }}
+                    />
+                  </div>
+
+                  {/* Product Info */}
+                  <div className="p-4">
+                    <h4 className="font-semibold text-foreground text-sm line-clamp-2">{product.name}</h4>
+                    <p className="text-xs text-muted-foreground mt-1">{product.category}</p>
+                    <div className="flex items-center justify-between mt-3">
+                      <p className="font-bold text-primary">₹{product.price.toLocaleString()}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <Button variant="hero" size="lg" className="w-full" onClick={() => {
+              const element = document.querySelector("#products");
+              element?.scrollIntoView({ behavior: "smooth" });
+            }}>
+              View All Products
+            </Button>
           </div>
         </div>
       </div>

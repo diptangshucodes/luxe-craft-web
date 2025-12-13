@@ -4,16 +4,19 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-charcoal text-primary-foreground">
+    <footer id="footer" className="bg-charcoal text-primary-foreground">
       <div className="container-custom section-padding pb-8">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center space-x-2 mb-6">
-              <span className="font-serif text-2xl font-bold">LeatherCraft</span>
-              <span className="text-gold text-sm font-medium tracking-widest uppercase">
-                Co.
-              </span>
+            <div className="mb-6">
+              <div className="flex items-center space-x-2 mb-2">
+                <span className="font-serif text-2xl font-bold">Kamala Trader</span>
+                <span className="text-gold text-sm font-medium tracking-widest uppercase">
+                  Co.
+                </span>
+              </div>
+              <p className="text-xs text-primary-foreground/60">GST: 27AABCT1234H1Z0</p>
             </div>
             <p className="text-primary-foreground/70 leading-relaxed mb-6">
               Crafting premium leather goods with passion and precision since 1990. 
@@ -110,10 +113,10 @@ export function Footer() {
               <li className="flex items-center gap-3">
                 <Mail size={20} className="text-gold flex-shrink-0" />
                 <a
-                  href="mailto:info@leathercraft.co"
+                  href="mailto:info@kamaltrader.com"
                   className="text-primary-foreground/70 hover:text-gold transition-colors"
                 >
-                  info@leathercraft.co
+                  info@kamaltrader.com
                 </a>
               </li>
             </ul>
@@ -124,7 +127,7 @@ export function Footer() {
         <div className="border-t border-primary-foreground/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-primary-foreground/50 text-sm">
-              © {currentYear} LeatherCraft Co. All rights reserved.
+              © {currentYear} Kamala Trader. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a

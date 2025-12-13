@@ -37,7 +37,7 @@ export function AboutSection() {
             Our Story
           </span>
           <h2 className="font-serif text-4xl lg:text-5xl font-bold text-foreground mt-3 mb-6">
-            About LeatherCraft Co.
+            About Kamala Trader
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed">
             For over three decades, we've been at the forefront of leather manufacturing, 

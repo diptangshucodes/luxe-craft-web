@@ -39,22 +39,44 @@ export function BulkOrderSection() {
     specifications: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Bulk Order Request Submitted!",
-      description:
-        "Our sales team will contact you within 24-48 hours with a custom quote.",
-    });
-    setFormData({
-      companyName: "",
-      contactName: "",
-      email: "",
-      phone: "",
-      productCategory: "",
-      quantity: "",
-      specifications: "",
-    });
+    
+    try {
+      const response = await fetch('http://localhost:3001/api/send-bulk-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit bulk order');
+      }
+
+      toast({
+        title: "Bulk Order Request Submitted!",
+        description:
+          "Our sales team will contact you within 24-48 hours with a custom quote.",
+      });
+      setFormData({
+        companyName: "",
+        contactName: "",
+        email: "",
+        phone: "",
+        productCategory: "",
+        quantity: "",
+        specifications: "",
+      });
+    } catch (error) {
+      console.error('Error submitting bulk order:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit request. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -70,7 +92,7 @@ export function BulkOrderSection() {
               Bulk Orders
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-              Partner with LeatherCraft Co. for your wholesale leather product needs. 
+              Partner with Kamala Trader for your wholesale leather product needs. 
               We offer competitive pricing, custom branding options, and dedicated 
               account management for bulk orders.
             </p>

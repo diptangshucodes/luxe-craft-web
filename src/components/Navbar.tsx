@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 
 const navLinks = [
   { name: "Home", href: "#home" },
+  { name: "Collection", href: "#collection" },
   { name: "About", href: "#about" },
   { name: "Testimonials", href: "#testimonials" },
-  { name: "Bulk Orders", href: "#bulk-orders" },
-  { name: "Contact", href: "#contact" },
+  { name: "Contact", href: "#footer" },
 ];
 
 export function Navbar() {
@@ -49,12 +49,17 @@ export function Navbar() {
             }}
             className="flex items-center space-x-2"
           >
-            <span className="font-serif text-2xl font-bold text-primary">
-              LeatherCraft
-            </span>
-            <span className="text-gold text-sm font-medium tracking-widest uppercase">
-              Co.
-            </span>
+            <div>
+              <div className="flex items-center space-x-1">
+                <span className="font-serif text-2xl font-bold text-primary">
+                  Kamala Trader
+                </span>
+                <span className="text-gold text-sm font-medium tracking-widest uppercase">
+                  Co.
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-0.5">GST: 27AABCT1234H1Z0</p>
+            </div>
           </a>
 
           {/* Desktop Navigation */}
@@ -75,7 +80,7 @@ export function Navbar() {
             <Button
               variant="hero"
               size="sm"
-              onClick={() => scrollToSection("#contact")}
+              onClick={() => scrollToSection("#bulk-orders")}
             >
               Get Quote
             </Button>
@@ -112,7 +117,7 @@ export function Navbar() {
                 <Button
                   variant="hero"
                   className="w-full"
-                  onClick={() => scrollToSection("#contact")}
+                  onClick={() => scrollToSection("#bulk-orders")}
                 >
                   Get Quote
                 </Button>

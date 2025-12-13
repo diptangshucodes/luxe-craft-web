@@ -1,0 +1,16 @@
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cardholderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5C2E0E;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="500" height="500" fill="#f5f5f5"/>
+  <rect x="100" y="120" width="300" height="260" fill="url(#cardholderGradient)" rx="15"/>
+  <rect x="110" y="135" width="280" height="30" fill="#D4A574" opacity="0.6" rx="5"/>
+  <rect x="110" y="175" width="280" height="30" fill="#D4A574" opacity="0.5" rx="5"/>
+  <rect x="110" y="215" width="280" height="30" fill="#D4A574" opacity="0.5" rx="5"/>
+  <rect x="110" y="255" width="280" height="30" fill="#D4A574" opacity="0.5" rx="5"/>
+  <path d="M 140 330 L 140 360 M 180 330 L 180 360 M 220 330 L 220 360 M 260 330 L 260 360 M 300 330 L 300 360 M 340 330 L 340 360" stroke="#D4A574" stroke-width="4"/>
+  <text x="250" y="430" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">Card Holder</text>
+</svg>
