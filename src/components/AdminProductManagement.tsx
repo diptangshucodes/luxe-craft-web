@@ -55,7 +55,6 @@ export function AdminProductManagement() {
   const fetchProducts = async () => {
     try {
       setError("");
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
       const response = await fetch(`${API_URL}/api/products`);
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -66,6 +65,20 @@ export function AdminProductManagement() {
       const errorMsg = error instanceof Error ? error.message : "Failed to load products";
       console.error("Error fetching products:", error);
       setError(errorMsg);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/categories`);
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      const data = await response.json();
+      setCategories(data || []);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      setCategories([]);
     }
   };
 
@@ -350,16 +363,25 @@ export function AdminProductManagement() {
               <label className="block text-sm font-medium text-foreground mb-2">
                 Category *
               </label>
-              <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
+              <Select
+                value={formData.category}
+                onValueChange={(value) => setFormData({ ...formData, category: value })}
+              >
                 <SelectTrigger className="h-10 bg-background">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
+                  {categories.length === 0 ? (
+                    <SelectItem value="" disabled>
+                      No categories found
                     </SelectItem>
-                  ))}
+                  ) : (
+                    categories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.name}>
+                        {cat.name}
+                      </SelectItem>
+                    ))
+                  )}
                 </SelectContent>
               </Select>
             </div>

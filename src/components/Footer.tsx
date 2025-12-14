@@ -127,7 +127,7 @@ export function Footer() {
         <div className="border-t border-primary-foreground/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-primary-foreground/50 text-sm">
-              © {currentYear} Kamala Trader. All rights reserved.
+              © {currentYear} Kamala Trader. All rights reserved. Developed by Diptangshu Dolui.
             </p>
             <div className="flex gap-6">
               <a
