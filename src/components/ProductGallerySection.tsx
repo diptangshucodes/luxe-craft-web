@@ -29,9 +29,10 @@ export const ProductGallerySection = () => {
     fetchProducts();
   }, []);
 
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
   const fetchProducts = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
       const response = await fetch(`${API_URL}/api/products`);
       const data = await response.json();
       setProducts(data || []);
@@ -105,7 +106,7 @@ export const ProductGallerySection = () => {
                     {/* Image Container */}
                     <div className="aspect-square overflow-hidden">
                       <img
-                        src={`http://localhost:3001/uploads/${product.image_filename}`}
+                        src={`${API_URL}/uploads/${product.image_filename}`}
                         alt={product.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />

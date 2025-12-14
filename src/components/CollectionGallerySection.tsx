@@ -17,9 +17,10 @@ export function CollectionGallerySection() {
     fetchGalleryImages();
   }, []);
 
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
   const fetchGalleryImages = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
       const response = await fetch(`${API_URL}/api/gallery-images`);
       const data = await response.json();
       setItems(data || []);
@@ -79,7 +80,7 @@ export function CollectionGallerySection() {
                     {/* Image Container */}
                     <div className="aspect-square overflow-hidden">
                       <img
-                        src={`http://localhost:3001${item.url}`}
+                        src={`${API_URL}${item.url}`}
                         alt={item.filename}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
