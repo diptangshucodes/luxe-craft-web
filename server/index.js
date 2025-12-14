@@ -13,7 +13,7 @@ import {
   deleteImage,
   getGalleryImages,
 } from './imageService.js';
-import { initializeDatabase, productDb, emailConfigDb, contactDetailsDb } from './database.js';
+import { initializeDatabase, productDb, emailConfigDb, contactDetailsDb, categoryDb } from './database.js';
 
 dotenv.config();
 
@@ -25,7 +25,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const CORS_ORIGINS = (process.env.CORS_ORIGINS || 'http://localhost:8081,http://localhost:5173').split(',');
+const CORS_ORIGINS = (process.env.CORS_ORIGINS || 'http://localhost:8080,http://localhost:5173').split(',');
 
 // CORS configuration for multiple origins
 const corsOptions = {
@@ -236,6 +236,72 @@ app.get('/api/gallery-images', async (req, res) => {
     res.json(result.images);
   } else {
     res.status(500).json({ error: result.error });
+  }
+});
+
+// ===== CATEGORY ENDPOINTS =====
+
+// Get all categories
+app.get('/api/categories', async (req, res) => {
+  try {
+    const categories = await categoryDb.getAll();
+    res.json(categories);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    res.status(500).json({ error: 'Failed to fetch categories' });
+  }
+});
+
+// Create category (admin only)
+app.post('/api/admin/categories', verifyToken, async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'Category name is required' });
+    }
+
+    const category = await categoryDb.create(name.trim());
+    res.json(category);
+  } catch (error) {
+    console.error('Error creating category:', error);
+    if (error.message.includes('UNIQUE constraint failed')) {
+      return res.status(400).json({ error: 'Category already exists' });
+    }
+    res.status(500).json({ error: 'Failed to create category' });
+  }
+});
+
+// Update category (admin only)
+app.put('/api/admin/categories/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'Category name is required' });
+    }
+
+    const category = await categoryDb.update(id, name.trim());
+    res.json(category);
+  } catch (error) {
+    console.error('Error updating category:', error);
+    if (error.message.includes('UNIQUE constraint failed')) {
+      return res.status(400).json({ error: 'Category already exists' });
+    }
+    res.status(500).json({ error: 'Failed to update category' });
+  }
+});
+
+// Delete category (admin only)
+app.delete('/api/admin/categories/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await categoryDb.delete(id);
+    res.json(result);
+  } catch (error) {
+    console.error('Error deleting category:', error);
+    res.status(500).json({ error: 'Failed to delete category' });
   }
 });
 

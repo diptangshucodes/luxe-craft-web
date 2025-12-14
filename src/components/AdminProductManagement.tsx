@@ -22,17 +22,15 @@ interface Product {
   created_at: string;
 }
 
-const categories = [
-  "Bags & Briefcases",
-  "Wallets & Cardholders",
-  "Belts & Accessories",
-  "Journals & Portfolios",
-  "Custom Products",
-];
+interface Category {
+  id: number;
+  name: string;
+}
 
 export function AdminProductManagement() {
   const { toast } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -47,9 +45,11 @@ export function AdminProductManagement() {
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const token = localStorage.getItem("adminToken");
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const fetchProducts = async () => {

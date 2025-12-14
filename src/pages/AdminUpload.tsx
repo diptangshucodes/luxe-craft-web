@@ -4,13 +4,14 @@ import { AdminImageUpload } from "@/components/AdminImageUpload";
 import { AdminProductManagement } from "@/components/AdminProductManagement";
 import { AdminEmailSettings } from "@/components/AdminEmailSettings";
 import { AdminContactSettings } from "@/components/AdminContactSettings";
+import { AdminCategoryManagement } from "@/components/AdminCategoryManagement";
 import { LogOut } from "lucide-react";
 
-type Tab = "gallery" | "products" | "email" | "contact";
+type Tab = "category" | "products" | "gallery" | "email" | "contact";
 
 const AdminUpload = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<Tab>("products");
+  const [activeTab, setActiveTab] = useState<Tab>("category");
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
@@ -45,6 +46,16 @@ const AdminUpload = () => {
       {/* Tabs */}
       <div className="container-custom py-8">
         <div className="flex gap-4 mb-8 border-b border-border">
+          <button
+            onClick={() => setActiveTab("category")}
+            className={`px-4 py-3 font-medium transition-colors border-b-2 ${
+              activeTab === "category"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Category
+          </button>
           <button
             onClick={() => setActiveTab("products")}
             className={`px-4 py-3 font-medium transition-colors border-b-2 ${
@@ -88,6 +99,7 @@ const AdminUpload = () => {
         </div>
 
         {/* Tab Content */}
+        {activeTab === "category" && <AdminCategoryManagement />}
         {activeTab === "products" && <AdminProductManagement />}
         {activeTab === "gallery" && <AdminImageUpload />}
         {activeTab === "email" && <AdminEmailSettings />}

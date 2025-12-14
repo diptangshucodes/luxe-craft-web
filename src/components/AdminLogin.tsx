@@ -122,10 +122,6 @@ export function AdminLogin() {
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
-
-          <p className="text-center text-muted-foreground text-sm mt-6">
-            Default: admin / admin123
-          </p>
         </div>
       </div>
     </div>

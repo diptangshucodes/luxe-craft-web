@@ -28,6 +28,16 @@ export const initializeDatabase = async () => {
   await initDb();
 
   db.serialize(() => {
+    // Categories table
+    db.run(`
+      CREATE TABLE IF NOT EXISTS categories (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL UNIQUE,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     // Products table
     db.run(`
       CREATE TABLE IF NOT EXISTS products (
@@ -104,6 +114,33 @@ export const initializeDatabase = async () => {
             'https://wa.me/919876543210',
           ]
         );
+      }
+    });
+
+    // Add default categories if table is empty
+    db.get('SELECT COUNT(*) as count FROM categories', (err, row) => {
+      if (row && row.count === 0) {
+        const defaultCategories = [
+          'Bags & Briefcases',
+          'Wallets & Cardholders',
+          'Belts & Accessories',
+          'Journals & Portfolios',
+          'Custom Products'
+        ];
+
+        defaultCategories.forEach((category) => {
+          db.run(
+            'INSERT INTO categories (name) VALUES (?)',
+            [category],
+            (err) => {
+              if (err && err.message.includes('UNIQUE constraint failed')) {
+                // Category already exists, skip
+              } else if (err) {
+                console.error('Error inserting category:', err);
+              }
+            }
+          );
+        });
       }
     });
 
@@ -302,6 +339,57 @@ export const contactDetailsDb = {
             const updated = await contactDetailsDb.get();
             resolve(updated);
           }
+        }
+      );
+    });
+  },
+};
+
+// Category operations
+export const categoryDb = {
+  getAll: () => {
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM categories ORDER BY name ASC', (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows || []);
+      });
+    });
+  },
+
+  create: (name) => {
+    return new Promise((resolve, reject) => {
+      db.run(
+        'INSERT INTO categories (name) VALUES (?)',
+        [name],
+        function (err) {
+          if (err) reject(err);
+          else resolve({ id: this.lastID, name });
+        }
+      );
+    });
+  },
+
+  update: (id, name) => {
+    return new Promise((resolve, reject) => {
+      db.run(
+        'UPDATE categories SET name = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+        [name, id],
+        (err) => {
+          if (err) reject(err);
+          else resolve({ id, name });
+        }
+      );
+    });
+  },
+
+  delete: (id) => {
+    return new Promise((resolve, reject) => {
+      db.run(
+        'DELETE FROM categories WHERE id = ?',
+        [id],
+        (err) => {
+          if (err) reject(err);
+          else resolve({ success: true });
         }
       );
     });
