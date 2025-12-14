@@ -3,7 +3,11 @@
   "outputDirectory": "dist",
   "routes": [
     {
-      "src": "^/(?!.*\\.).*$",
+      "src": "/(?!.*\\.(?:js|css|json|png|jpg|gif|svg|ico|webp|woff|woff2|ttf|eot|map)$).*",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.+?)$",
       "dest": "/index.html"
     }
   ]
